@@ -171,9 +171,11 @@
       </div>
     </div>
 
+
+
     <div class="mb-y">
       <div class="embed-youtube">
-        <div id="sample04" data-movieid="4niQ-lCTTv4" class="ytPlayerReady">
+        <div id="sample04" data-movieid="4niQ-lCTTv4" data-width="750" data-height="465" class="ytPlayerReady">
           <img src="https://img.youtube.com/vi/4niQ-lCTTv4/mqdefault.jpg" alt="" width="640" height="390">
         </div>
       </div>
@@ -187,175 +189,8 @@
   </main>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="youtube_multi_load.js"></script>
 
-  <script type="text/javascript">
-    // 各プレーヤーの格納
-    var ytPlayer = [];
-    // プレーヤーのサイズ
-    var ytWidth = 640;
-    var ytHeight = 390;
-
-    var ua = navigator.userAgent;
-    if (ua.indexOf('iPhone') > 0 || ua.indexOf('iPad') > 0 || ua.indexOf('iPod') > 0) {
-      var os = "ios";
-    } else if (ua.indexOf('Android') > 0) {
-      var os = "android";
-    } else {
-      var os = "pc";
-    }
-    logmes("OS:" + os);
-
-    // iOSはlazyload的に処理
-    if (os == "ios") {
-      var thisOffset = [];
-      $(window).on('load', function () {
-        //要素の位置取得
-        $(".ytPlayerReady").each(function (i, elm) {
-          thisOffset[i] = [];
-          thisOffset[i]["playerId"] = $(elm).attr("id");
-          thisOffset[i]["movieId"] = $(elm).data("movieid");
-          thisOffset[i]["ytWidth"] = ytWidth;
-          thisOffset[i]["ytHeight"] = ytHeight;
-          thisOffset[i]["height"] = $(elm).offset().top + $(elm).outerHeight();
-          thisOffset[i]["lazyStatus"] = false;
-
-          logmes("位置:" + $(elm).attr("id") + ":" + thisOffset[i]["height"]);
-        });
-
-        // console.log(thisOffset);
-
-        //スクロール開始前にも、ファーストビュー中に動画があったらYouTube起動処理
-        youtubeLazy(ytPlayer, thisOffset);
-      });
-
-      //lazyload的YouTube起動処理
-      $(window).scroll(function () {
-        youtubeLazy(ytPlayer, thisOffset);
-      });
-    }
-
-    function youtubeLazy(ytPlayer, thisOffset) {
-      var nowScrollTop;
-      for (var i = 0; i < thisOffset.length; i++) {
-        nowScrollTop = $(window).scrollTop() + $(window).height();
-
-        if (nowScrollTop > thisOffset[i]["height"] && !thisOffset[i]["lazyStatus"]) {
-          logmes("lazyload:" + thisOffset[i]["playerId"]);
-
-          $("#" + thisOffset[i]["playerId"]).removeClass("ytPlayerReady");
-          $("#" + thisOffset[i]["playerId"]).parent().parent().find(".controller").show();
-
-          youTubeIframeAPIReady(ytPlayer, thisOffset[i]["playerId"], thisOffset[i]["movieId"], thisOffset[i]["ytWidth"],
-            thisOffset[i]["ytHeight"]);
-
-          thisOffset[i]["lazyStatus"] = true;
-        }
-      }
-    }
-
-    //画像クリックでのYouTube起動処理
-    $(".ytPlayerReady").click(function () {
-      var playerId = $(this).attr("id");
-      var movieId = $(this).data("movieid");
-      $(this).removeClass("ytPlayerReady");
-      $(this).parent().parent().find(".controller").show();
-
-      logmes("起動クリック:" + playerId + ":" + movieId);
-
-      youTubeIframeAPIReady(ytPlayer, playerId, movieId, ytWidth, ytHeight);
-
-    });
-
-    $(".y_start").click(function () {
-      var playerId = $(this).parents('.controller').data("playerid");
-      videoControl("playVideo", playerId);
-    });
-    $(".y_pause").click(function () {
-      var playerId = $(this).parents('.controller').data("playerid");
-      videoControl("pauseVideo", playerId);
-    });
-
-    // 各プレーヤーの埋め込み
-    function youTubeIframeAPIReady(ytPlayer, playerId, movieId, ytWidth, ytHeight) {
-      ytPlayer[playerId] = new YT.Player(playerId, {
-        width: ytWidth,
-        height: ytHeight,
-        videoId: movieId,
-        playerVars: {
-          rel: 0
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
-        }
-      });
-
-    }
-
-    // 各プレーヤー準備完了後の処理
-    function onPlayerReady(event) {
-      playerId = event.target.getIframe().id;
-      logmes(playerId + ":onPlayerReady");
-
-      if (os != "ios") {
-        // videoControl("mute", playerId);
-        videoControl("playVideo", playerId);
-      }
-
-    }
-
-    function onPlayerStateChange(event) {
-      playerId = event.target.getIframe().id;
-      logmes(playerId + ":onPlayerStateChange");
-      playerStateView(event, playerId);
-    }
-
-    function playerStateView(event, playerId) {
-      var ytStatus = ytPlayer[playerId].getPlayerState();
-
-      if (ytStatus == 1) {
-        logmes('ステータス:再生中');
-      } else if (ytStatus == 0) {
-        logmes('ステータス:終了');
-      } else if (ytStatus == 2) {
-        logmes('ステータス:一時停止中');
-      } else if (ytStatus == 3) {
-        logmes('ステータス:バッファリング中');
-      } else if (ytStatus == 5) {
-        logmes('ステータス:頭出し済み');
-      } else if (ytStatus == -1) {
-        logmes('ステータス:未開始');
-      } else {
-        logmes('ステータス:該当なし?ログ確認');
-        console.log(ytStatus);
-      }
-    }
-
-    function videoControl(action, playerId) {
-      // playVideo or pauseVideo or mute or unMute
-
-      logmes("操作:" + playerId + ":" + action);
-      var $playerWindow = $("#" + playerId)[0].contentWindow;
-      if ($playerWindow) {
-        $playerWindow.postMessage('{"event":"command","func":"' + action + '","args":""}', '*');
-      }
-    }
-
-    function logmes(log) {
-      if (log != "") {
-        var mes = $("#mes").html();
-        mes = mes + "<p>" + log + "</p>";
-        $("#mes").html(mes);
-
-        var scrollPoint = $('#mes')[0].scrollHeight;
-
-        // $(".mesBox").scrollTop(scrollPoint);
-        $('.mesBox').animate({
-          scrollTop: $('#mes')[0].scrollHeight
-        });
-      }
-    }
-  </script>
 </body>
 
 </html>
