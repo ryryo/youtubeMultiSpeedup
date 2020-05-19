@@ -1,0 +1,92 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vimeo autoplay</title>
+    <link rel="stylesheet" href="reset.min.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
+
+    <script src="https://player.vimeo.com/api/player.js"></script>
+</head>
+
+<body>
+    <div class="mesBox">
+        <div id="mes"></div>
+    </div>
+
+    <main>
+        <div class="mb-y">
+            <div class="embed-vimeo">
+                <div id="sample01" data-video="https://player.vimeo.com/video/152452551?autoplay=1"
+                    class="vimeoPlayerReady">
+                    <img src="https://i.vimeocdn.com/video/152452551_780x439.jpg" alt="" width="640" height="390">
+                </div>
+            </div>
+
+            <div class="controller" data-playerid="sample01" style="display:none">
+                <p>
+                    <span class="v_start">スタート</span> |
+                    <span class="v_pause">一時停止</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="mb-y">
+            <div class="embed-vimeo">
+                <div id="sample02" data-video="https://player.vimeo.com/video/191642422?autoplay=1"
+                    class="vimeoPlayerReady">
+                    <img src="https://i.vimeocdn.com/video/191642422_780x439.jpg" alt="" width="640" height="390">
+                </div>
+            </div>
+
+            <div class="controller" data-playerid="sample02" style="display:none">
+                <p>
+                    <span class="v_start">スタート</span> |
+                    <span class="v_pause">一時停止</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="mb-y">
+            <div class="embed-vimeo">
+                <div id="sample03" data-video="https://player.vimeo.com/video/370089837?autoplay=1"
+                    class="vimeoPlayerReady">
+                    <img src="https://i.vimeocdn.com/video/370089837_780x439.jpg" alt="" width="640" height="390">
+                </div>
+            </div>
+            <div class="controller" data-playerid="sample03" style="display:none">
+                <p>
+                    <span class="v_start">スタート</span> |
+                    <span class="v_pause">一時停止</span>
+                </p>
+            </div>
+        </div>
+
+
+
+        <div class="mb-y">
+            <div class="embed-vimeo">
+                <div id="sample04" data-video="https://player.vimeo.com/video/184840918?autoplay=1"
+                    class="vimeoPlayerReady">
+                    <img src="https://i.vimeocdn.com/video/184840918_780x439.jpg" alt="" width="640" height="390">
+                </div>
+            </div>
+            <div class="controller" data-playerid="sample04" style="display:none">
+                <p>
+                    <span class="v_start">スタート</span> |
+                    <span class="v_pause">一時停止</span>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="vimeo_multi_load.js"></script>
+
+</body>
+
+</html>

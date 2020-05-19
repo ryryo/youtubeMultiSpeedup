@@ -146,10 +146,10 @@ $(function () {
             timer = setInterval(moviePlayTimeView, 5000); //動画の再生時間表示
         } else if (ytStatus == 0) {
             logmes('ステータス:終了');
-            clearTimeout(timer);
+            clearInterval(timer);
         } else if (ytStatus == 2) {
             logmes('ステータス:一時停止中');
-            clearTimeout(timer);
+            clearInterval(timer);
         } else if (ytStatus == 3) {
             logmes('ステータス:バッファリング中');
         } else if (ytStatus == 5) {
@@ -168,7 +168,7 @@ $(function () {
         logmes("再生時間:" + playerId + ":" + currentTime);
 
         if (currentTime > 60) {
-            clearTimeout(timer);
+            clearInterval(timer);
         }
     }
 
