@@ -1,4 +1,10 @@
 $(function () {
+    //html上にAPI読込みタグ設置
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
     // 各プレーヤーの格納
     var ytPlayer = [];
     // プレーヤーのサイズ
